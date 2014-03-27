@@ -12,26 +12,23 @@ end
 
 %global CSPsi CSPsit CSA CSAt
 
-% ======== wavelet transform operators, fwt/iwt : [N,1] -> [N,1]
+% wavelet transform operators, fwt/iwt : [N,1] -> [N,1]
 if DWTTYPE==0
 	% CDF 9/7 (not recommended)
-	fwt=@(f) cdf97_1d(f,+1);
-	iwt=@(f) cdf97_1d(f,-1);
-	fwts=@(f) cdf97_1d(f,+1);
-	iwts=@(f) cdf97_1d(f,-1);
+	Jmaxlev=log2(N)-4;
+	fwt=@(f) cdf97_1d(f,+1,Jmaxlev);
+	iwt=@(f) cdf97_1d(f,-1,Jmaxlev);
+	fwts=@(f) cdf97_1d(f,+1,Jmaxlev);
+	iwts=@(f) cdf97_1d(f,-1,Jmaxlev);
 elseif DWTTYPE==1
 	% WAVELAB
 	qmf=MakeONFilter('Coiflet',3);   % Coiflet 18
 	%qmf=MakeONFilter('Symmlet',10);
 	fwt=@(f) FWT_PO(f,0,qmf);
 	iwt=@(f) IWT_PO(f,0,qmf);
-	
 	qmf2=MakeONFilter('Symmlet',6);
-	%qmf2=MakeONFilter('Coiflet',2);
-	%qmf2=MakeONFilter('Battle',1);
 	fwts=@(f) FWT_PO(f,0,qmf2);
 	iwts=@(f) IWT_PO(f,0,qmf2);
-	
 elseif DWTTYPE==2
 	% WAVELET TOOLBOX
 	f=zeros(N,1);
@@ -372,7 +369,7 @@ for k=1:SIMN
 			Eopt_d=Espec(fhap_d);
 			toc(specID)
 			
-			% ==== more clever than averaging ====
+			% more clever than averaging
 			[kvec,ff]=Espec(f);
 			wj=find(kvec>2^7 & kvec<=2^(J-2));
 			[~,E1]=Espec(CSAt_d(CSA_d(fhap)));
