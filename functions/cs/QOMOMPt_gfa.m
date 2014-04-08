@@ -18,7 +18,6 @@ r=y;
 psyt=Psit(y);
 x=zeros(N,1);
 ind=1:2^J0;
-%if (nargin < 6), L=1; end
 if (nargin < 8+1), tol=1e-4; end  % default is 1e-6 for lsqr
 if (nargin < 9+1), tolf=1e-9; end % final iteration
 L(L<0)=0; % negative Lj = 0
@@ -32,16 +31,11 @@ end
 x0=x(ind);
 b=psyt(ind);
 
-
-%b=sign(b).*(abs(b)).^(0.8);
 [xt,~] = tfqmr(@(xx) itfunc(xx,Psi,Psit,ind,N),b,tol,200,[],[],x0);
-%xt = nsoli(x0,@(xx) nlfunc(xx,Psi,Psit,b,ind,N),[tol,0]);
-
 
 % solution of oracle
 x(ind)=xt;
 r=y-Psi(x);
-
 
 for j=J0:log2(N)-1
 	% index set
@@ -51,13 +45,11 @@ for j=J0:log2(N)-1
 	omeg=[omegs*2,omegs*2-1]; % Omega_(j)
 	
 	
-	temp=abs(Psit(r)); %figure;plot(x),figure;plot(temp)
+	temp=abs(Psit(r)); 
 	temp(omeg)=temp(omeg)*beta(j);
 	[~,i] = sort(temp(2^j+1:2^(j+1)));
 	i=i(end-L(j)+1:end) + 2^j;
 	ind=union(ind,i);
-	
-	% figure,plot_coef_im(abs(x)>0,1:length(x))
 	
 	% iterative method (with pseudo-inverse LS) no transpose
 	% (bicgstab, bicgstabl, cgs, gmres, minres, pcg, symmlq, tfqmr)
@@ -65,25 +57,18 @@ for j=J0:log2(N)-1
 	b=psyt(ind);
 	
 	
-	%b=sign(b).*(abs(b)).^(0.8);
 	[xt,~]  = tfqmr(@(xx) itfunc(xx,Psi,Psit,ind,N),b,tol,200,[],[],x0);
-	%xt = nsoli(x0,@(xx) nlfunc(xx,Psi,Psit,b,ind,N),[tol,0]);
 	
 	% update
 	x(1:end)=0;
 	x(ind)=xt;
 	r=y-Psi(x);
 	
-	%plot(x),xlim([-5,100])
+
 end
 
 % one final low tolerance iteration
-%[xt,~] = tfqmr(@(xx) itfunc(xx,Psi,Psit,ind,N),b,tolf,200,[],[],x0);
 [xt,flag,relres,iter] = tfqmr(@(xx) itfunc(xx,Psi,Psit,ind,N),b,tolf,200,[],[],x0);
-%xt = nsoli(x0,@(xx) nlfunc(xx,Psi,Psit,b,ind,N),[tolf,0]);
-
-%fprintf('flag=%d, iter=%d\n',flag,iter);
-
 
 x(1:end)=0;
 x(ind)=xt;
@@ -107,25 +92,6 @@ x2(ind)=x;
 
 val=Psit(Psi(x2));
 val=val(ind);
-
-%val=sign(val).*(abs(val)).^(0.8);
-
-end
-
-% dd
-function val=nlfunc(x,Psi,Psit,b,ind,N)
-
-x2=zeros(N,1);
-x2(ind)=x;
-
-val=Psit(Psi(x2));
-val=val(ind)-b;
-
-%val=val(ind);
-%val=sign(val).*log(abs(val))-sign(b).*log(abs(b));
-val=sign(val).*(abs(val)).^(0.5);
-
-%val(abs(val)>1e9)=-1e9;
 
 end
 

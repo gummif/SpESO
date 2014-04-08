@@ -21,7 +21,6 @@ psyt=Psit(y);
 x=zeros(Ns,Ns);
 ind=1:pow2(J0);
 ind=xyindex2x(ind,ind,Ns,Ns);
-%if (nargin < 6), L=1; end
 if (nargin < 7), tol=1e-4; end  % default is 1e-6 for lsqr
 if (nargin < 8), tolf=1e-9; end % final iteration
 L(L<0)=0; % negative Lj = 0
@@ -34,7 +33,6 @@ end
 x0=x(ind)';
 b=psyt(ind); b=b(:);
 [xt,flag] = symmlq(@(xx) itfunc(xx,Psi,Psit,ind,Ns),b,tol,200,[],[],x0);
-%[xt,~]  = tfqmr(@(xx) itfunc(xx,Psi,Psit,ind,N),b,tol,200,[],[],x0);
 
 % solution of oracle
 x(ind)=xt;
@@ -42,10 +40,7 @@ r=y-Psi(x);
 
 
 for j=J0:log2(Ns)-1
-	%fprintf('QOMOMP j=%d \n',j);
-	%for stage=1:nstage
-	
-	
+
 	itdiff = xyindex2x(1:2^(j-1),1:2^(j-1),Ns,Ns); %to remove
 	omeg = setdiff(ind,itdiff,'stable'); % Omega_(j-1)
 	omegs=find(abs(x)>alph(x(omeg))); 
@@ -62,12 +57,7 @@ for j=J0:log2(Ns)-1
 
 	
 	%============
-	
-	
-% 	% index set
-% 	temp=abs(Psit(r)); %figure;plot(x),figure;plot(temp)
-% 	temp2=temp(1:2^(j+1),1:2^(j+1));
-	
+
 	
 	[~,i] = sort(temp2(:));
 	itdiff = xyindex2x(1:2^j,1:2^j,pow2(j+1),pow2(j+1)); %to remove
@@ -109,22 +99,17 @@ for j=J0:log2(Ns)-1
 	b=psyt(ind); b=b(:);
 	
 	[xt,~]  = symmlq(@(xx) itfunc(xx,Psi,Psit,ind,Ns),b,tol,200,[],[],x0);
-	%[xt,~]  = tfqmr(@(xx) itfunc(xx,Psi,Psit,ind,N),b,tol,200,[],[],x0);
-	%[xt,~]
-	
+
 	% update
 	x(:)=0;
 	x(ind)=xt;
 	r=y-Psi(x);
 	
-	%plot(x),xlim([-5,100])
-%end
+
 end
-%fprintf('QOMOMP final \n',j);
 
 % one final low tolerance iteration
 [xt,flag,relres,iter] = symmlq(@(xx) itfunc(xx,Psi,Psit,ind,Ns),b,tolf,200,[],[],x0);
-%[xt,flag,relres,iter] = tfqmr(@(xx) itfunc(xx,Psi,Psit,ind,N),b,tolf,200,[],[],x0);
 x(:)=0;
 x(ind)=xt;
 

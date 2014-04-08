@@ -4,7 +4,7 @@
 % set parameters according to those set in main files
 SAVEDLOC='./';
 N=1024*32;
-SIMN0=64;  %4
+SIMN0=4;  %4
 SIMN0t=num2str(SIMN0);
 mstr='synth';
 K=num2str(284);
@@ -14,7 +14,7 @@ M1=num2str(4132); %other
 M2=num2str(2066); %speso
 
 % which simulation cases to plot?
-PLOTCASES=1:4;  % all: 1:SIMN0
+PLOTCASES=1:SIMN0;  % all: 1:SIMN0
 
 
 var1=load([SAVEDLOC,'saved_1d_',num2str(N),'_',M1,'_',SIMN0t,'_',mstr,'_',K,'_1_31_',EXTRA,'.mat']);

@@ -31,22 +31,6 @@ Res=param.res - mod(param.res,2)+1; %make sure it's odd
 Ldist=exp(linspace(-d,d,Res));
 
 
-
-
-% for i=1:param.resf
-% 	Li=L;
-% 	Li(jvec)=Li(jvec).*exp(randn(length(jvec),1)*param.df);
-% 	Li=round(Li);
-% 	% QOMOMP
-% 	u=D(Li,tolf);
-% 	% spectrum
-% 	[~,Ea]=E(u);
-%
-% 	Eopt=Eopt+log(Ea);
-%
-% end
-
-
 tolf=tolf*10;
 
 Ljend=L(jvec(end));
@@ -85,17 +69,12 @@ for s=1:param.iter			% iterations
 			[~,Ea]=E(At(A(u)));
 			% error in log space
 			flag = outp.flag ~= 0;  % 0 if 0, 1 if nonzero
-			%confact=((1-flag)+flag*outp.relres/tolf); % convergence factor
 			confact=1;  % do nothing
 			e(i)=norm(log(Ea(wj))-logspec)*confact;
-			%e(i)=norm(Ea(wj)-logspec)*confact;  % linear
-			
+
 			flag(i)=outp.flag;
 			
-			fprintf('i');
-			
 		end
-		%plot(Lcoef,e,'-*'),hold all
 		
 		if L0(j)<L0(j-1)
 			eind=Lcoef<=L(j-1)*dimsc;  % restrict L(j)<=L(j-1)*dimsc
@@ -105,36 +84,18 @@ for s=1:param.iter			% iterations
 		imin=find(e(eind)==min(e(eind)),1,'first');
 		L(j)=Lcoef(imin);
 		
-		fprintf(' j %d ,',L(j));
 		disp(flag(:)')
 	end
-	fprintf('\n');
-end
-%figure,plot(Lcoef,e,'-*')
 
-disp('final optim')
-Eopt=Eg*0;
-% average spectra
-for i=1:param.resf
-	Li=L;
-	%Li(jvec)=Li(jvec).*exp(randn(length(jvec),1)*param.df);  % randomize?
-	Li=round(Li);
-	% QOMOMP
-	%u=D(Li,tolf);
-	[u,outp]=D(Li,tolf);
-	disp(outp)
-	% spectrum
-	[~,Ea]=E(u);
-	
-	Eopt=Eopt+log(Ea);
-	
 end
 
-Eopt=exp(Eopt/param.resf);
-Lopt=round(L);
-
-
-
+Li=round(L);
+% QOMOMP
+[u,outp]=D(Li,tolf);
+disp(outp)
+% spectrum
+[~,Eopt]=E(u);
+Lopt=Li;
 
 
 

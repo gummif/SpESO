@@ -48,7 +48,7 @@ syntslope=1;	 % 1:(3,5/3), 2:(5/3,3)
 % =====================================
 
 % undersampling ratio
-do1vec=4;		% for SpESO (DECODER=82) use half:  82:(32,16,8), 1:(16,8,4)
+do1vec=8;		% for SpESO (DECODER=82) use half:  82:(32,16,8), 1:(16,8,4)
 SIMN=length(do1vec);
 SIMN0=4;		% number of experiments for each case
 

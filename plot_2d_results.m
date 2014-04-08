@@ -5,7 +5,7 @@
 SAVEDLOC='./';
 Ns=1024;
 N=Ns^2;
-SIMN0=8; %2
+SIMN0=2; %2
 SIMN0t=num2str(SIMN0);
 seedstr='1_';  % SEED
 mstr='synth';
@@ -15,7 +15,7 @@ M1=num2str(65536); %other
 M2=num2str(32761); %speso
 
 % which simulation cases to plot?
-PLOTCASES=1:2;  % all: 1:SIMN0
+PLOTCASES=1:SIMN0;  % all: 1:SIMN0
 
 
 var1=load([SAVEDLOC,'saved_2d_',num2str(N),'_',M1,'_',SIMN0t,'_',mstr,'_1_2_31_',seedstr,EXTRA,'.mat']);
