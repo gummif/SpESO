@@ -7,7 +7,7 @@ Spectrum Estimation by Sparse Optimization (SpESO). MATLAB code for energy spect
 About
 ----------------------
 
-Written by Gudmundur F. Adalsteinsson (2013-2014). This code is intended as a supplement to a journal article ([arXiv:1404.5653](http://arxiv.org/abs/1404.5653)) and a thesis to promote reproducible research in computational science.
+Written by Gudmundur F. Adalsteinsson (2013-2014). This code is intended as a supplement to a journal article ([arXiv:1404.5653](http://arxiv.org/abs/1404.5653)) and a thesis ([Paper 8916](http://digitalcommons.mcmaster.ca/opendissertations/8916)) to promote reproducible research in computational science.
 
 Copyright (c) 2014 Gudmundur Adalsteinsson (MIT License). See file LICENSE for license and warranty details.
 
